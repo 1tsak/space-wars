@@ -10,17 +10,17 @@ WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Space Shooter")
 #load images
 RED_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_red_small.png"))
-RED_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_green_small.png"))
-RED_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_yellow.png"))
+GREEN_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_green_small.png"))
+YELLOW_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_yellow.png"))
 
 #player ship
-RED_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_blue_small.png"))
+BLUE_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_blue_small.png"))
 
 #lasers
 RED_LASER = pygame.image.load(os.path.join("assets","pixel_laser_red.png"))
-RED_LASER = pygame.image.load(os.path.join("assets","pixel_laser_green.png"))
-RED_LASER = pygame.image.load(os.path.join("assets","pixel_laser_blue.png"))
-RED_LASER = pygame.image.load(os.path.join("assets","pixel_laser_yellow.png"))
+GREEN_LASER = pygame.image.load(os.path.join("assets","pixel_laser_green.png"))
+BLUE_LASER = pygame.image.load(os.path.join("assets","pixel_laser_blue.png"))
+YELLOW_LASER = pygame.image.load(os.path.join("assets","pixel_laser_yellow.png"))
 
 # Background
 
@@ -37,9 +37,15 @@ class Ship:
         self.cool_down_counter = 0
 
     def draw(self,window):
-        pygame.draw.rect(window,(255,0,0),(self.x,self.y,50,50))
+        window.blit(self.ship_img,(self.x,self.y))
 
-
+class Player(Ship):
+    def __init__(self,x,y,health=100):
+        super().__init__(x,y,health)
+        self.ship_img = BLUE_SPACESHIP
+        self.laser_img = YELLOW_LASER
+        self.mask = pygame.mask.from_surface(self.ship_img)
+        self.max_health = health
 
 def main():
     run = True
@@ -49,7 +55,7 @@ def main():
     main_font = pygame.font.SysFont("comicsans",30)
     # player speed
     player_speed = 5
-    ship = Ship(300,650)
+    player = Player(300,650)
     clock = pygame.time.Clock()
 
     def redraw_window():
@@ -59,7 +65,7 @@ def main():
         level_label = main_font.render(f"Level: {level}",1,(255,255,255))
         WIN.blit(lives_label,(10,10))
         WIN.blit(level_label,(WIDTH-level_label.get_width()-10,10))
-        ship.draw(WIN)
+        player.draw(WIN)
         pygame.display.update()
 
     while run:
@@ -71,17 +77,17 @@ def main():
         
         # move player
         keys= pygame.key.get_pressed()
-        if keys[pygame.K_a]and ship.x -player_speed > 0:  #left
-            ship.x -=player_speed
+        if keys[pygame.K_a]and player.x -player_speed > 0:  #left
+            player.x -=player_speed
         
-        if keys[pygame.K_d] and ship.x + player_speed < WIDTH:  #right
-            ship.x +=player_speed
+        if keys[pygame.K_d] and player.x + player_speed < WIDTH:  #right
+            player.x +=player_speed
         
-        if keys[pygame.K_w] and ship.y - player_speed > 0:  #up
-            ship.y -=player_speed
+        if keys[pygame.K_w] and player.y - player_speed > 0:  #up
+            player.y -=player_speed
         
-        if keys[pygame.K_s] and ship.y + player_speed < HEIGHT:  #down
-            ship.y +=player_speed
+        if keys[pygame.K_s] and player.y + player_speed < HEIGHT:  #down
+            player.y +=player_speed
         
 
 main()
