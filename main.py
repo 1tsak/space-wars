@@ -11,10 +11,10 @@ pygame.display.set_caption("Space Shooter")
 #load images
 RED_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_red_small.png"))
 GREEN_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_green_small.png"))
-YELLOW_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_yellow.png"))
+BLUE_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_blue_small.png"))
 
 #player ship
-BLUE_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_blue_small.png"))
+YELLOW_SPACESHIP = pygame.image.load(os.path.join("assets","pixel_ship_yellow.png"))
 
 #lasers
 RED_LASER = pygame.image.load(os.path.join("assets","pixel_laser_red.png"))
@@ -39,10 +39,14 @@ class Ship:
     def draw(self,window):
         window.blit(self.ship_img,(self.x,self.y))
 
+    def get_width(self):
+        return self.ship_img.get_width()
+    def get_height(self):
+        return self.ship_img.get_height()
 class Player(Ship):
     def __init__(self,x,y,health=100):
         super().__init__(x,y,health)
-        self.ship_img = BLUE_SPACESHIP
+        self.ship_img = YELLOW_SPACESHIP
         self.laser_img = YELLOW_LASER
         self.mask = pygame.mask.from_surface(self.ship_img)
         self.max_health = health
@@ -80,13 +84,13 @@ def main():
         if keys[pygame.K_a]and player.x -player_speed > 0:  #left
             player.x -=player_speed
         
-        if keys[pygame.K_d] and player.x + player_speed < WIDTH:  #right
+        if keys[pygame.K_d] and player.x + player_speed + player.get_width() < WIDTH:  #right
             player.x +=player_speed
         
         if keys[pygame.K_w] and player.y - player_speed > 0:  #up
             player.y -=player_speed
         
-        if keys[pygame.K_s] and player.y + player_speed < HEIGHT:  #down
+        if keys[pygame.K_s] and player.y + player_speed + player.get_height()< HEIGHT:  #down
             player.y +=player_speed
         
 
